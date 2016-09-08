@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-  <title>程序员2个月不写代码的感受 | 王琼</title>
+  <title>王琼</title>
   <meta name="description" content="" />
   <meta name="HandheldFriendly" content="True" />
   <meta name="MobileOptimized" content="320" />
@@ -44,14 +44,38 @@
 <main class="content" role="main">
   <article class="post">
     <span class="post-meta">
-      <time datetime="2016-09-01T05:08:21.000Z" itemprop="datePublished">
-          2016-09-01
+      <time datetime="2016-09-08T02:30:25.000Z" itemprop="datePublished">
+          2016-09-08
       </time>
     
 </span>
-    <h1 class="post-title">程序员2个月不写代码的感受</h1>
+    <h1 class="post-title"></h1>
     <section class="post-content">
-      <p><strong>1.</strong> 最近由于公司的原因没什么活干,每天就是看看技术blog,看看github这星期最火的开源项目,留着以后当轮子用,什么也懒得写,久而久之整个人就废材了!<br><strong>2.</strong> 充满了危机感,很浮躁,甚至静下心来看本书都没有耐心,对什么事情都没有激情,我现在都怀疑我是不是有抑郁症.<br><strong>3.</strong> 总结一下程序员前往不能闲,特别是闲太久,不然你现在就跟我一样每天不知道干嘛?</p>
+      <p>#OkHttp3 cache的缺陷<br>最近在写一个android快速开发框架OkHttp+retrofit+RxJava的MVP demo,在使用http的网络请求结果缓存的时候遇到一个问题.</p>
+<p>##OkHttp缓存介绍<br>OkHttp的缓存类为Cache, 创建一个Cache对象后在OkHttpClient的内部Builder中进行设置即可：</p>
+<pre><code>File httpCacheDirectory = new File(App.get().getCacheDir(), &quot;OkHttpCache&quot;);
+    httpClientBuilder.cache(new Cache(httpCacheDirectory, 10 * 1024 * 1024));
+</code></pre><p>###缓存失效场景<br>在使用的时候服务器可能需要我们传递很多动态参数,比如时间戳,根据时间戳动态签名校验等等…通过查看源码我们发现是OkHttp3缓存采用DiskLruCache,我们查看一下具体写入缓存的核心代码是</p>
+<pre><code>String key = urlToKey(request);
+DiskLruCache.Snapshot snapshot;
+Entry entry;
+try {
+  snapshot = cache.get(key);
+  if (snapshot == null) {
+    return null;
+  }
+} catch (IOException e) {
+ return null;
+}
+</code></pre><p> 而我们需要关心的是key = urlToKey(request); 这行代码</p>
+<pre><code>private static String urlToKey(Request request) {
+   return Util.md5Hex(request.url().toString());
+}
+</code></pre><p>request.url()这行代码返回了这个请求的url+全部参数.这就会造成我们每次请求的key都会发生变化,这也是cache失效的主要原因.</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><blockquote>
+<p>1.因为Okhttp3是开源的我们可以把完整代码clone下来,从新实现 cache key的算法<br>2.使用<a href="https://realm.io/news/using-realm-with-rxjava/" target="_blank" rel="external">Realm</a><strong>Android ORM</strong>配合RxJava自己实现结果缓存</p>
+</blockquote>
+<p>##总结<br>如果你们有更好的解决方案请联系我谢谢<br><strong>邮箱:</strong> <a href="&#109;&#x61;&#105;&#x6c;&#116;&#x6f;&#x3a;&#x77;&#113;&#x61;&#110;&#x64;&#x72;&#111;&#105;&#x64;&#64;&#103;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#111;&#109;">&#x77;&#113;&#x61;&#110;&#x64;&#x72;&#111;&#105;&#x64;&#64;&#103;&#x6d;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#111;&#109;</a></p>
 
     </section>
     <footer class="post-footer">
@@ -61,18 +85,18 @@
 </section>
       <section class="share">
     <h4>Share this post</h4>
-    <a class="icon-sina-weibo" href="http://v.t.sina.com.cn/share/share.php?title=作为挨踢业的伪设计狮伪技术牛 搬过砖也种过地：爱看、爱听、爱玩儿、爱折腾、机械水电、泥瓦木匠啥都来 ?url=http://yoursite.com/2016/09/01/Title/" target="_blank">
+    <a class="icon-sina-weibo" href="http://v.t.sina.com.cn/share/share.php?title=作为挨踢业的伪设计狮伪技术牛 搬过砖也种过地：爱看、爱听、爱玩儿、爱折腾、机械水电、泥瓦木匠啥都来 ?url=http://yoursite.com/2016/09/08/okhttp3 cache/" target="_blank">
         <span class="hidden">weibo</span>
     </a>
-    <a class="icon-twitter" href="http://twitter.com/share?url=http://yoursite.com/2016/09/01/Title/"
+    <a class="icon-twitter" href="http://twitter.com/share?url=http://yoursite.com/2016/09/08/okhttp3 cache/"
        onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
         <span class="hidden">Twitter</span>
     </a>
-    <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2016/09/01/Title/"
+    <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2016/09/08/okhttp3 cache/"
        onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
         <span class="hidden">Facebook</span>
     </a>
-    <a class="icon-google-plus" href="https://plus.google.com/share?url=http://yoursite.com/2016/09/01/Title/"
+    <a class="icon-google-plus" href="https://plus.google.com/share?url=http://yoursite.com/2016/09/08/okhttp3 cache/"
        onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
         <span class="hidden">Google+</span>
     </a>
@@ -82,14 +106,10 @@
   </article>
   <nav class="pagination" role="pagination">
     
-    <a class="newer-posts" href="/2016/09/08/okhttp3 cache/">
-        ← 
-    </a>
-    
     <span class="icon-logo">•</span>
     
-    <a class="older-posts" href="/2016/08/18/first/">
-        谈谈移动应用的安全性实践 →
+    <a class="older-posts" href="/2016/09/01/Title/">
+        程序员2个月不写代码的感受 →
     </a>
     
 </nav>
