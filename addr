@@ -1,1 +1,1 @@
-[{"isBlock":true,"address":"TL98is2ePeuAMcXqqw1jyVz6LmkL9WFqUs","chain":"TRC20"},{"isBlock":true,"address":"TL98is2ePeuAMcXqqw1jyVz6LmkL9WFqUs","chain":"BEP20(BSC)"}]
+[{"isBlock":true,"address":"TL98is2ePeuAMcXqqw1jyVz6LmkL9WFqUs","chain":"TRC20","minAmount":100.0},{"isBlock":true,"address":"TL98is2ePeuAMcXqqw1jyVz6LmkL9WFqUs","chain":"BEP20(BSC)","minAmount":100.0}]
